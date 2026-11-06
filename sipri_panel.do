@@ -16,13 +16,6 @@ do			"`DO'" doc
 * Crée le fichier "sipri_panel.csv"  *
 **************************************/
 
-/*	Panel européen */
-local 				FILEIN="DATA\Production\SIPRI_European_panel_2002-2024.xlsx"
-import excel using 	"`FILEIN'", sheet("EU panel") clear
-drop in 			1
-generate			EU=1
-save				"sipri_panel_eu_original.dta", replace 
-
 /*	Liste des variables :
 
 		A : Firm
@@ -33,6 +26,13 @@ save				"sipri_panel_eu_original.dta", replace
 		F : Arms revenues (US$ m)
 		G : Dual use
 		H : Name in original SIPRI table */
+
+/*	Panel européen */
+local 				FILEIN="DATA\Production\SIPRI_European_panel_2002-2024.xlsx"
+import excel using 	"`FILEIN'", sheet("EU panel") clear
+drop in 			1
+generate			EU=1
+save				"sipri_panel_eu_original.dta", replace 
 
 /*	Panel non-européen*/
 local 				FILEIN="DATA\Production\SIPRI_European_panel_2002-2024.xlsx"
@@ -47,42 +47,27 @@ save				"sipri_panel_original.dta", replace
 
 use					"sipri_panel_original.dta", clear
 
-/*	Variable SORT pour remettre le fichier dans l'ordre de départ si néc. */
-generate		SORT=_n
+cd					"C:\Users\82128\Documents\GitHub\Dual-use\"
 
-/*	Vire la première ligne des noms des variables et créer mes propres noms */
+/*	ligne : pour remettre le fichier dans l'ordre de départ si néc. */
+generate			ligne=_n
 
-
-
-/* 	RAISON
-		Deux noms de variables : A, H			
-		AT a beaucoup de missing, garder A */
-order			A H 
-generate		TEMP=ustrcompare(A,H,"fr")
-order			TEMP, after(H)
+/* 	groupe : nom du groupe
+		Deux noms de variables : A, H */
+do				"sipri_panel_group.do"
 s
-keep if			TEMP==0
-
-rename			A firm_name
-rename			H firm_name_previous
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*	COUNTRY, code iso-2, REGION */
 do				"scoreboard_panel_country.do"
+
+
+
+
+
+
+
+
+
 
 /*	YEAR 
 		C'est l'année de réalisation des valeurs des autres variables. Par ex.,
