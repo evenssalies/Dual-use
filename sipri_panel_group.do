@@ -60,7 +60,9 @@ table				temp
 /*	Prendre les Nom après et vérifier les structures de contrôle sur le web */
 drop				temp
 erase				"filetemp.dta"				
+replace				A=strupper(A)
 rename				A group_name
+
 export delimited 	"file_group.csv", delimiter(",") replace
 
 use					"sipri_panel_original.dta", replace
