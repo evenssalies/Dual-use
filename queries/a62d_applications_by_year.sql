@@ -18,7 +18,8 @@ WITH demandes AS (
     ARRAY_AGG(DISTINCT a.country_code IGNORE NULLS) AS pays
   FROM `patents-public-data.patents.publications`, UNNEST(['F41', 'F42']) AS tech, UNNEST(assignee_harmonized) AS a
   WHERE
-    pct_number != ''
+    pct_number IS NOT NULL
+    AND TRIM(pct_number) != ''
     AND kind_code LIKE 'A%'
     AND priority_date BETWEEN 20000101 AND 20211231
     AND a.country_code != ''
