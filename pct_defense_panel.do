@@ -1,12 +1,11 @@
-/*
+/* 
 
  Demandes de brevets PCT : Etats-Unis, Chine, France, Allemagne, Espagne, Italie
- Technologies F41 et F42 additionnees (armes, munitions et explosifs)
- Style : graphique de gauche, diapositive 23 de presentation.pdf
+ Technologies relatives a la defense.
 
- Entree  : queries/job_WxsOXzYzGB48GQwUGaRWk1bO6bDs.csv
+ Entrée  : queries/job_WxsOXzYzGB48GQwUGaRWk1bO6bDs.csv
            (resultat de queries/dual_use_applications_by_year.sql)
- Sortie  : pct_f41_f42_pays.png
+ Sortie  : pct_defense_panel.png
 
 */
 
@@ -17,8 +16,7 @@ set more off
 /*	Lecture du resultat BigQuery : country_code, year, applications */
 import delimited using "queries\job_WxsOXzYzGB48GQwUGaRWk1bO6bDs.csv", clear
 
-/*	Addition de F41 et F42 par pays et par annee.
-	Une demande classee dans F41 et F42 a la fois est comptee deux fois. */
+/*	Addition des demandes par pays et par annee */
 collapse (sum) applications, by(country_code year)
 
 /*	Une ligne par annee, une colonne par pays */
@@ -64,7 +62,7 @@ graph combine gauche droite, ///
 	rows(1) ///
 	graphregion(color(white)) ///
 	note(`"Source : Google Patents Public Data (BigQuery), demandes PCT, date de priorité, pays du déposant, comptage fractionnaire."' `"Codes IPC (défense) : F41, F42, B63G, B21D51/54, B21K21/04, B21K21/06, B21K21/14, B60R7/14, B64D1/04,"' `"B64D1/06, B64D7/, E04H9/04, E04H9/08, E04H9/12, E06B5/10, G01S1/42, G01S19/18, G06G7/80, A62D101/02."', size(vsmall)) ///
-	name(pct_f41_f42_pays, replace)
+	name(pct_defense_panel, replace)
 
-graph export "pct_f41_f42_pays.png", name(pct_f41_f42_pays) replace width(1400)
-graph export "pct_f41_f42_pays.pdf", name(pct_f41_f42_pays) replace
+graph export "pct_defense_panel.png", name(pct_defense_panel) replace width(1400)
+graph export "pct_defense_panel.pdf", name(pct_defense_panel) replace
