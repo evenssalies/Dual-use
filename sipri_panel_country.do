@@ -2,21 +2,21 @@
 		B : Pays nom :			55
 		EU : Union européenne :	 2 */
 
-/*	Reécrire les noms de pays mal écrits */
-sort			B
+/*	Re-ecrire les noms de pays mal ecrits */
+sort			B group_name
 table			B
 
-rename			B country
+replace			B="Czech Republic" if B=="Czechia"
 
-replace			country="Czech Republic" if country=="Czechia"
+rename			B english
 
+merge m:1		english using "http://www.frequency.fr/countries.dta", ///
+				keepusing(ue27_2020 ze21 alpha2) nogenerate keep(1 3)
 
+rename			english country
 
-
-
-
-
-
+sort			line			
+/*
 
 
 
